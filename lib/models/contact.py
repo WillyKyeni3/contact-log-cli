@@ -29,3 +29,16 @@ class Contact(Base):
         if len(value.strip()) == 0:
             raise ValueError("Name cannot be empty")
         self._name = value.strip()
+        
+    @property
+    def email(self):
+        return self._email
+    
+    @email.setter
+    def email(self, value):
+        # Simple email validation
+        if value is not None and not isinstance(value, str):
+            raise ValueError("Email must be a string or None")
+        if value and '@' not in value:
+            raise ValueError("Invalid email format")
+        self._email = value
