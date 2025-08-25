@@ -42,3 +42,14 @@ class Contact(Base):
         if value and '@' not in value:
             raise ValueError("Invalid email format")
         self._email = value
+        
+    @property
+    def phone_number(self):
+        return self._phone_number
+    
+    @phone_number.setter
+    def phone_number(self, value):
+        # Simple phone number validation
+        if value is not None and not isinstance(value, str):
+            raise ValueError("Phone number must be a string or None")
+        self._phone_number = value
