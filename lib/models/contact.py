@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from lib.helpers import session, Base
+from lib.helpers import Base
 
 
 class Contact(Base):
