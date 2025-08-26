@@ -1,3 +1,5 @@
+"""Initializing the models package and make models available at package level."""
+
 # Import models to register with Base.metadata
 from .contact import Contact
 from .communicaton import Communication
