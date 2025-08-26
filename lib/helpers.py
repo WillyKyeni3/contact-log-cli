@@ -30,7 +30,7 @@ Base = declarative_base()
 def init_db():
     """Create all tables in the database."""
     Base.metadata.create_all(engine)
-    print(" Database & tables created successfully.")
+    print("✅ Database & tables created successfully.")
 
 def close_db():
     """Close the database session."""
