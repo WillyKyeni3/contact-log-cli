@@ -1,7 +1,7 @@
-# lib/models/contact.py
+# Day 1 tasks 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from lib.helpers import Base
+from lib.helpers import session, Base
 
 class Contact(Base):
     __tablename__ = 'contacts'
@@ -11,13 +11,13 @@ class Contact(Base):
     email = Column(String)
     phone_number = Column(String)
 
-    # One-to-many relationship: Contact has many Communications
+    # One-to-many relationship, Contact has many Communications
     communications = relationship('Communication', back_populates='contact', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<Contact(id={self.id}, name='{self.name}', email='{self.email}', phone='{self.phone_number}')>"
 
-    # --- Property Methods for Validation ---
+    # Property Methods for Validation 
     @property
     def name(self):
         return self._name
@@ -51,3 +51,19 @@ class Contact(Base):
         if value is not None and not isinstance(value, str):
             raise ValueError("Phone number must be a string or None.")
         self._phone_number = value
+        
+        
+    # Day 2 Task: ORM class methods
+    @classmethod
+    def create(cls, name, email=None, phone_number=None):
+        """Create and save a new Contact to the database."""
+        contact = cls(name=name, email=email, phone_number=phone_number)
+        session.add(contact)
+        session.commit()
+        return contact
+    
+    def delete(self):
+        """Delete this Contact from the database."""
+        session.delete(self)
+        session.commit()
+    
