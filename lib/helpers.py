@@ -1,12 +1,13 @@
-# lib/helpers.py
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 import os
 import sqlite3
+from lib.models.communication import Communication
+from lib.models.contact import Contact
 
-# Enable foreign key constraints for SQLite
+# Enables foreign key constraints for SQLite
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     if isinstance(dbapi_connection, sqlite3.Connection):
@@ -14,7 +15,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
         cursor.execute("PRAGMA foreign_keys=ON")
         cursor.close()
 
-# Use SQLite for simplicity (you can change to MySQL later if needed)
+# Use SQLite for simplicity
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///contact_log.db')
 
 # Create engine
@@ -30,8 +31,26 @@ Base = declarative_base()
 def init_db():
     """Create all tables in the database."""
     Base.metadata.create_all(engine)
-    print("✅ Database & tables created successfully.")
+    print("Database & tables created successfully.")
 
 def close_db():
     """Close the database session."""
     session.close()
+
+
+# Day 2 task: Utility functions
+def create_contact(name, email=None, phone_number=None):
+    """Helper to create a contact through the models's create method."""
+    return Contact.create(name, email, phone_number)
+
+def get_all_contact():
+    """Helper to retrieve all contacts."""
+    return Contact.get_all()
+
+def find_contact_by_id(id):
+    """Helper to find a contact by ID."""
+    return Contact.find_by_id(id)
+
+def create_communication(contact_id, date, notes):
+    """Helper to create a communication through the model's create method."""
+    return Communication.create(contact_id, date, notes)
