@@ -56,7 +56,7 @@ class Contact(Base):
     # Day 2 Task: ORM class methods
     @classmethod
     def create(cls, name, email=None, phone_number=None):
-        """Create and save a new Contact to the database."""
+        """Creates and saves a new Contact to the database."""
         contact = cls(name=name, email=email, phone_number=phone_number)
         session.add(contact)
         session.commit()
@@ -66,4 +66,17 @@ class Contact(Base):
         """Delete this Contact from the database."""
         session.delete(self)
         session.commit()
+        
+    @classmethod
+    def get_all(cls):
+        """Retrieves all Contacts from the database."""
+        return session.query(cls).all()
     
+    @classmethod
+    def find_by_id(cls, id):
+        """Finds a Contact by its ID."""
+        return session.query(cls).filter_by(id=id).first()
+
+    def get_communications(self):
+        """Returns all Communications for this Contact."""
+        return self.communications
