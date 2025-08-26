@@ -1,6 +1,6 @@
 # lib/debug.py
 from lib.helpers import (
-    create_contact, get_all_contacts, find_contact_by_id,
+    create_contact, get_all_contact, find_contact_by_id,
     create_communication, get_all_communications, find_communication_by_id,
     get_communications_for_contact
 )
@@ -16,7 +16,7 @@ def test_contact_operations():
     
     # Get all contacts
     print("\n2. Getting all contacts...")
-    all_contacts = get_all_contacts()
+    all_contacts = get_all_contact()
     print(f"Found {len(all_contacts)} contacts:")
     for c in all_contacts:
         print(f"  - {c}")
