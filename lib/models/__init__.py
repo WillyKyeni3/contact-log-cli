@@ -1,11 +1,14 @@
-"""Initializing the models package and make models available at package level."""
+# lib/models/__init__.py
+"""
+Initialize the models package and make models available at the package level.
+"""
 
-# Import models to register with Base.metadata
+# Import models so they are registered with Base.metadata
 from .contact import Contact
-from .communicaton import Communication
+from .communication import Communication
 
-# import Base and session from helpers for easier access
+# Import Base and session from helpers to make them easily accessible
 from ..helpers import Base, session, engine
 
-# Definition of what is imported with " from lib.models import"
+# Define what gets imported with 'from lib.models import *'
 __all__ = ['Contact', 'Communication']
