@@ -22,3 +22,16 @@ engine = create_engine(DATABASE_URL, echo=True)
 # sessionmaker factory
 Session = sessionmaker(bind=engine)
 session = Session()
+
+# Base class for declarative models
+Base = declarative_base()
+
+def init_db():
+    """create all tables in the database."""
+    Base.metadata.create_all(engine)
+    print("Database and tables created successfully.")
+    
+def close_db():
+    """Close the database session."""
+    session.close()
+    print("Database session closed.")
