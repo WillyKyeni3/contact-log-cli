@@ -12,3 +12,13 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
         cursor = dbapi_connection.cursor()
         cursor.execute("PRAGMA foreign_keys=ON")
         cursor.close()
+        
+# Define the SQLite database file path
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///contact_log.db')
+
+# Create the SQLAlchemy engine
+engine = create_engine(DATABASE_URL, echo=True)
+
+# sessionmaker factory
+Session = sessionmaker(bind=engine)
+session = Session()
