@@ -1,7 +1,8 @@
+# Day 1 task: imports, relationship, property methods.
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from lib.helpers import Base
+from lib.helpers import session, Base
 
 class Communication(Base):
     __tablename__ = 'communications'
@@ -44,3 +45,28 @@ class Communication(Base):
         if not value.strip():
             raise ValueError("Notes cannot be empty.")
         self._notes = value.strip()
+
+
+    # Day 2 Task: ORM class methods
+    @classmethod
+    def create(cls, contact_id, date, notes):
+        """Creates and saves a new Communication to the database."""
+        communication = cls(contact_id=contact_id, date=date, notes=notes)
+        session.add(communication)
+        session.commit()
+        return communication
+
+    def delete(self):
+        """Deletes this Communication from the database."""
+        session.delete(self)
+        session.commit()
+
+    @classmethod
+    def get_all(cls):
+        """Retrieves all Communications from the database."""
+        return session.query(cls).all()
+
+    @classmethod
+    def find_by_id(cls, id):
+        """Finds a Communication by its ID."""
+        return session.query(cls).filter_by(id=id).first()
