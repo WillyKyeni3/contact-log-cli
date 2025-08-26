@@ -1,6 +1,6 @@
 # Day 1 task: imports, relationship, property methods.
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
-from datetime import datetime
+from datetime import date, datetime
 from sqlalchemy.orm import relationship
 from lib.database import session, Base
 
@@ -25,7 +25,7 @@ class Communication(Base):
 
     @date.setter
     def date(self, value):
-        if not isinstance(value, (datetime.date, str)):
+        if not isinstance(value, (date, str)):
             raise ValueError("Date must be a date object or a string in YYYY-MM-DD format.")
         if isinstance(value, str):
             try:
