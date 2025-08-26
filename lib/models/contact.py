@@ -1,7 +1,7 @@
 # Day 1 tasks 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from lib.helpers import session, Base
+from lib.database import session, Base
 
 class Contact(Base):
     __tablename__ = 'contacts'
