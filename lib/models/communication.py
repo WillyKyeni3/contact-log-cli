@@ -18,16 +18,16 @@ class Communication(Base):
     def __repr__(self):
         return f"<Communication(id={self.id}, contact_id={self.contact_id}, date={self.date}, notes='{self.notes[:30]}...')>"
     
-  #   
+    
     @validates('date')
     def validate_date(self, key, value):
         """Validate date format when setting the date attribute."""
-        if not isinstance(value, (datetime.date, str)):
+        if not isinstance(value, (date, str)):
             raise ValueError("Date must be a date object or a string in YYYY-MM-DD format.")
         if isinstance(value, str):
             try:
                 # Convert string to date object
-                return datetime.datetime.strptime(value, '%Y-%m-%d').date()
+                return datetime.strptime(value, '%Y-%m-%d').date()
             except ValueError:
                 raise ValueError("Date must be in YYYY-MM-DD format.")
         return value
