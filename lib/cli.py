@@ -229,3 +229,60 @@ def delete_communication():
             
     except ValueError:
         print("\n❌ Invalid ID format. Please enter a number.")
+
+
+def main():
+    print("===== WELCOME TO CONTACT-LOG CLI =====")
+    print("Your professional relationship tracker")
+    
+    while True:
+        menu()
+        choice = input("Select an option: ").strip()
+        
+        if choice == "0":
+            print("\nGoodbye! Thanks for using Contact-Log CLI.")
+            break
+            
+        elif choice == "1":
+            # Contact management submenu
+            while True:
+                contact_menu()
+                contact_choice = input("Select an option: ").strip()
+                
+                if contact_choice == "0":
+                    break
+                elif contact_choice == "1":
+                    list_all_contacts()
+                elif contact_choice == "2":
+                    create_new_contact()
+                elif contact_choice == "3":
+                    view_contact_details()
+                elif contact_choice == "4":
+                    delete_contact()
+                else:
+                    print("\n❌ Invalid option. Please try again.")
+                    
+        elif choice == "2":
+            # Communication management submenu
+            while True:
+                communication_menu()
+                comm_choice = input("Select an option: ").strip()
+                
+                if comm_choice == "0":
+                    break
+                elif comm_choice == "1":
+                    list_all_communications()
+                elif comm_choice == "2":
+                    create_new_communication()
+                elif comm_choice == "3":
+                    view_communications_for_contact()
+                elif comm_choice == "4":
+                    delete_communication()
+                else:
+                    print("\n❌ Invalid option. Please try again.")
+                    
+        else:
+            print("\n❌ Invalid option. Please try again.")
+
+if __name__ == "__main__":
+    main()
