@@ -9,7 +9,7 @@ from lib.models import Contact, Communication
 def test_contact_operations():
     print("\n=== TESTING CONTACT OPERATIONS ===")
     
-    # Create a contact
+    # Creates a contact
     print("\n1. Creating a new contact...")
     contact = create_contact("Willy Musyoka", "willymusyoka@gmail.com", "0759 170970")
     print(f" Created contact: {contact}")
@@ -21,7 +21,7 @@ def test_contact_operations():
     for c in all_contacts:
         print(f"  - {c}")
     
-    # Find contact by ID
+    # Finds contact by ID
     print("\n3. Finding contact by ID...")
     found_contact = find_contact_by_id(contact.id)
     print(f"Found contact: {found_contact}")
@@ -30,8 +30,8 @@ def test_contact_operations():
 
 def test_communication_operations(contact):
     print("\n=== TESTING COMMUNICATION OPERATIONS ===")
-    
-    # Create a communication
+
+    # Creates a communication
     print("\n1. Creating a communication for the contact...")
     comm = create_communication(
         contact.id,
