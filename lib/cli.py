@@ -75,3 +75,26 @@ def create_new_contact():
         display_contact(contact)
     except ValueError as e:
         print(f"\n❌ Error creating contact: {str(e)}")
+        
+def view_contact_details():
+    """Displays details of a specific contact by ID."""
+    try:
+        contact_id = int(input("\nEnter contact ID: "))
+        contact = find_contact_by_id(contact_id)
+        
+        if not contact:
+            print(f"\n❌ Contact with ID {contact_id} not found.")
+            return
+        display_contact(contact)
+        
+    # show communications for this conatact
+        communications = get_communications_for_contact(contact_id)
+        if communications:
+            print("\nCommunications:")
+            for comm in communications:
+                print(f"- {comm.date}: {comm.notes[:50]}{'...' if len(comm.notes) > 50 else ''}")
+        else:
+            print("\nNo communications found for this contact.")
+            
+    except ValueError:
+        print("\n❌ Invalid ID format. Please enter a number.")
