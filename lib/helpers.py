@@ -2,7 +2,7 @@ from lib.database import session, Base, engine
 from lib.models import Contact, Communication
 
 
-# Day 2 task: Utility functions
+# Utility functions
 # contact
 def create_contact(name, email=None, phone_number=None):
     """Helper to create a contact through the models's create method."""
