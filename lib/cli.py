@@ -98,3 +98,27 @@ def view_contact_details():
             
     except ValueError:
         print("\n❌ Invalid ID format. Please enter a number.")
+        
+def delete_contact():
+    """Delete a contact after confirmation."""
+    try:
+        contact_id = int(input("\nEnter contact ID to delete: "))
+        contact = find_contact_by_id(contact_id)
+        
+        if not contact:
+            print(f"\n❌ Contact with ID {contact_id} not found.")
+            return
+            
+        # Confirm deletion
+        print("\nAre you sure you want to delete this contact?")
+        display_contact(contact)
+        
+        confirm = input("\nType 'yes' to confirm deletion: ").strip().lower()
+        if confirm == 'yes':
+            contact.delete()
+            print(f"\n✅ Contact '{contact.name}' deleted successfully.")
+        else:
+            print("\n❌ Deletion cancelled.")
+            
+    except ValueError:
+        print("\n❌ Invalid ID format. Please enter a number.")
