@@ -106,6 +106,102 @@ def test_deletion(contact, comm):
     communications_after_delete = get_communications_for_contact(contact.id)
     print(f"Communications still exist? {'Yes' if communications_after_delete else 'No'}")
 
+# CLI flow tests
+def test_cli_flow():
+    """Test a complete CLI interaction flow."""
+    print("\n=== TESTING CLI FLOW ===")
+    
+    # Create test data
+    contact = create_contact("CLI Test Contact", "cli@test.com", "555-0100")
+    print(f"Created test contact: {contact}")
+    
+    # Create communications
+    create_communication(contact.id, "2024-08-25", "Initial meeting about CLI testing")
+    create_communication(contact.id, "2024-08-26", "Follow-up on CLI functionality")
+    print("Created test communications")
+    
+    # Test contact operations
+    print("\n1. Testing contact listing...")
+    list_all_contacts()
+    
+    print("\n2. Testing contact details...")
+    view_contact_details_for(contact.id)
+    
+    # Test communication operations
+    print("\n3. Testing communication listing...")
+    list_all_communications()
+    
+    print("\n4. Testing communications for contact...")
+    view_communications_for_contact(contact.id)
+    
+    # Cleanup
+    print("\n5. Cleaning up test data...")
+    contact.delete()
+    print("✅ Test data cleaned up")
+
+# helper functions for the CLI tests
+def list_all_contacts():
+    """CLI-style contact listing."""
+    contacts = get_all_contact()
+    if not contacts:
+        print("No contacts found.")
+        return
+    
+    print("All Contacts:")
+    for i, contact in enumerate(contacts, 1):
+        print(f"{i}. {contact.name} (ID: {contact.id})")
+
+def view_contact_details_for(contact_id):
+    """CLI-style contact details display."""
+    contact = find_contact_by_id(contact_id)
+    if not contact:
+        print(f"Contact with ID {contact_id} not found.")
+        return
+    
+    print(f"\nContact ID: {contact.id}")
+    print(f"Name: {contact.name}")
+    print(f"Email: {contact.email or 'N/A'}")
+    print(f"Phone: {contact.phone_number or 'N/A'}")
+    
+    communications = get_communications_for_contact(contact_id)
+    if communications:
+        print("\nRecent Communications:")
+        for comm in communications:
+            print(f"- {comm.date}: {comm.notes[:50]}{'...' if len(comm.notes) > 50 else ''}")
+
+def list_all_communications():
+    """CLI-style communication listing."""
+    comms = get_all_communications()
+    if not comms:
+        print("No communications found.")
+        return
+    
+    print("All Communications:")
+    for comm in comms:
+        contact = find_contact_by_id(comm.contact_id)
+        contact_name = contact.name if contact else "[Unknown Contact]"
+        print(f"- ID: {comm.id} | {contact_name} | {comm.date}: {comm.notes[:50]}{'...' if len(comm.notes) > 50 else ''}")
+
+def view_communications_for_contact(contact_id):
+    """CLI-style communications display for a contact."""
+    contact = find_contact_by_id(contact_id)
+    if not contact:
+        print(f"Contact with ID {contact_id} not found.")
+        return
+    
+    print(f"\nCommunications for {contact.name}:")
+    communications = get_communications_for_contact(contact_id)
+    
+    if not communications:
+        print("No communications logged for this contact.")
+        return
+        
+    for comm in communications:
+        print(f"\n- ID: {comm.id}")
+        print(f"  Date: {comm.date}")
+        print(f"  Notes: {comm.notes}")
+        
+        
 def main():
     print(" Setting up the Contact-Log database...")
     
@@ -119,6 +215,7 @@ def main():
     comm = test_communication_operations(contact)
     test_relationships(contact, comm)
     test_deletion(contact, comm)
+    test_cli_flow()
     
     print("\n ALL TESTS COMPLETED SUCCESSFULLY!")
 
