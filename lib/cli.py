@@ -46,3 +46,32 @@ def display_communication(comm):
     print(f"\nCommunication ID: {comm.id}")
     print(f"Date: {comm.date}")
     print(f"Notes: {comm.notes}")
+    
+def list_all_contacts():
+    """Display all contacts in a user-friendly format."""
+    contacts = get_all_contact()
+    if not contacts:
+        print("\nNo contacts found.")
+        return
+    print("\nAll Contacts:")
+    for i, contact in enumerate(contacts, 1):
+        print(f"{i}. {contact.name} (ID: {contact.id})")
+        
+def create_new_contact():
+    """Prompt user for contact details and create a new contact."""
+    print("\n--- Create New Contact ---")
+    
+    name = input("Enter contact name: ").strip()
+    if not name:
+        print("Error: Name cannot be empty.")
+        return
+    
+    email = input("Enter email (optional): ").strip() or None
+    phone = input("Enter phone number (optional): ").strip() or None
+    
+    try:
+        contact = create_contact(name, email, phone)
+        print(f"\n✅ Contact created successfully! ID: {contact.id}")
+        display_contact(contact)
+    except ValueError as e:
+        print(f"\n❌ Error creating contact: {str(e)}")
