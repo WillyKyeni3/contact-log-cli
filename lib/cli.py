@@ -15,10 +15,34 @@ def menu():
     print("===========================")
     
 def contact_menu():
-    """Display the contact management menu."""
-    print("\n===== CONTACT MANAGEMENT =====")
+    """Display the contact management submenu."""
+    print("\n--- CONTACT MANAGEMENT ---")
     print("1. List all contacts")
     print("2. Create a new contact")
     print("3. View a contact's details")
     print("4. Delete a contact")
     print("0. Back to main menu")
+    print("------------------------")
+    
+def communication_menu():
+    """Display the communication management submenu."""
+    print("\n--- COMMUNICATION MANAGEMENT ---")
+    print("1. List all communications")
+    print("2. Create a new communication")
+    print("3. View communication for a contact")
+    print("4. Delete a communication")
+    print("0. Back to main menu")
+    print("------------------------")
+    
+def display_contact(contact):
+    """Format and display a contact's information."""
+    print(f"\nContact ID: {contact.id}")
+    print(f"Name: {contact.name}")
+    print(f"Email: {contact.email or 'N/A'}")
+    print(f"Phone: {contact.phone_number or 'N/A'}")
+    
+def display_communication(comm):
+    """Format and display a communication's information."""
+    print(f"\nCommunication ID: {comm.id}")
+    print(f"Date: {comm.date}")
+    print(f"Notes: {comm.notes}")
