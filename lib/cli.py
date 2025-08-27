@@ -3,6 +3,7 @@ from lib.helpers import (
     create_communication, get_all_communications, find_communication_by_id,
     get_communications_for_contact
 )
+from datetime import datetime, date
 from lib.models import Contact, Communication
 
 # Display the menu options
@@ -117,6 +118,112 @@ def delete_contact():
         if confirm == 'yes':
             contact.delete()
             print(f"\n✅ Contact '{contact.name}' deleted successfully.")
+        else:
+            print("\n❌ Deletion cancelled.")
+            
+    except ValueError:
+        print("\n❌ Invalid ID format. Please enter a number.")
+
+        
+# Communication
+def list_all_communications():
+    """Display all communications in a user-friendly format."""
+    comms = get_all_communications()
+    if not comms:
+        print("\nNo communications found.")
+        return
+    
+    print("\nAll Communications:")
+    for comm in comms:
+        contact = find_contact_by_id(comm.contact_id)
+        contact_name = contact.name if contact else "[Unknown Contact]"
+        print(f"- ID: {comm.id} | {contact_name} | {comm.date}: {comm.notes[:50]}{'...' if len(comm.notes) > 50 else ''}")
+        
+
+def create_new_communication():
+    """Create a new communication entry for a contact."""
+    try:
+        contact_id = int(input("\nEnter contact ID: "))
+        contact = find_contact_by_id(contact_id)
+        
+        if not contact:
+            print(f"\n❌ Contact with ID {contact_id} not found.")
+            return
+            
+        print(f"\nCreating communication for: {contact.name}")
+        
+        # Get date with validation
+        while True:
+            date_str = input("Enter date (YYYY-MM-DD): ").strip()
+            try:
+                # validate the format
+                datetime.strptime(date_str, '%Y-%m-%d') 
+                break
+            except ValueError:
+                print("❌ Invalid date format. Please use YYYY-MM-DD.")
+        
+        notes = input("Enter communication notes: ").strip()
+        if not notes:
+            print("\n❌ Notes cannot be empty.")
+            return
+            
+        comm = create_communication(contact_id, date_str, notes)
+        print(f"\n✅ Communication created successfully! ID: {comm.id}")
+        display_communication(comm)
+        
+    except ValueError:
+        print("\n❌ Invalid ID format. Please enter a number.")
+        
+        
+def view_communications_for_contact():
+    """Display all communications for a specific contact."""
+    try:
+        contact_id = int(input("\nEnter contact ID: "))
+        contact = find_contact_by_id(contact_id)
+        
+        if not contact:
+            print(f"\n❌ Contact with ID {contact_id} not found.")
+            return
+            
+        print(f"\nCommunications for {contact.name}:")
+        communications = get_communications_for_contact(contact_id)
+        
+        if not communications:
+            print("No communications logged for this contact.")
+            return
+            
+        for comm in communications:
+            print(f"\n- ID: {comm.id}")
+            print(f"  Date: {comm.date}")
+            print(f"  Notes: {comm.notes}")
+            
+    except ValueError:
+        print("\n❌ Invalid ID format. Please enter a number.")
+        
+        
+def delete_communication():
+    """Delete a communication entry after confirmation."""
+    try:
+        comm_id = int(input("\nEnter communication ID to delete: "))
+        comm = find_communication_by_id(comm_id)
+        
+        if not comm:
+            print(f"\n❌ Communication with ID {comm_id} not found.")
+            return
+            
+        # Get associated contact
+        contact = find_contact_by_id(comm.contact_id)
+        contact_name = contact.name if contact else "[Unknown Contact]"
+        
+        print(f"\nAre you sure you want to delete this communication?")
+        print(f"From: {contact_name}")
+        print(f"Date: {comm.date}")
+        print(f"Notes: {comm.notes}")
+        
+        confirm = input("\nType 'yes' to confirm deletion: ").strip().lower()
+        if confirm == 'yes':
+            comm.delete()
+            print("\n✅ Communication deleted successfully.")
         else:
             print("\n❌ Deletion cancelled.")
             
