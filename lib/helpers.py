@@ -1,5 +1,6 @@
 from lib.database import session, Base, engine
 from lib.models import Contact, Communication
+from datetime import date, datetime
 
 
 # Utility functions
@@ -35,3 +36,28 @@ def get_communications_for_contact(contact_id):
     if contact:
         return contact.get_communications()
     return None
+
+
+def validate_date(date_string):
+    """Validate date string is in YYYY-MM-DD format."""
+    try:
+        datetime.strptime(date_string, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+def get_valid_date(prompt):
+    """Prompt user for a valid date with retries."""
+    while True:
+        date_str = input(prompt).strip()
+        if validate_date(date_str):
+            return date_str
+        print("❌ Invalid date format. Please use YYYY-MM-DD.")
+
+def get_non_empty_input(prompt, error_msg="Cannot be empty."):
+    """Get non-empty input from user with validation."""
+    while True:
+        value = input(prompt).strip()
+        if value:
+            return value
+        print(f"❌ {error_msg}")
