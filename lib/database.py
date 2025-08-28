@@ -18,7 +18,7 @@ def set_sqlite_pragma(dbapi_connection, _):  # "_" tells SQLAlchemy to ignore th
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///contact_log.db')
 
 # Create engine
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(DATABASE_URL, echo=False)
 
 # Create session factory
 Session = sessionmaker(bind=engine)
