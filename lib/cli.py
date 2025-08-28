@@ -1,7 +1,7 @@
 from lib.helpers import (
     create_contact, get_all_contact, find_contact_by_id,
     create_communication, get_all_communications, find_communication_by_id,
-    get_communications_for_contact
+    get_communications_for_contact, search_contacts
 )
 from datetime import datetime, date
 from lib.models import Contact, Communication
@@ -21,7 +21,8 @@ def contact_menu():
     print("1. List all contacts")
     print("2. Create a new contact")
     print("3. View a contact's details")
-    print("4. Delete a contact")
+    print("4. Search contacts by name")
+    print("5. Delete a contact")
     print("0. Back to main menu")
     print("------------------------")
     
@@ -72,10 +73,10 @@ def create_new_contact():
     
     try:
         contact = create_contact(name, email, phone)
-        print(f"\n✅ Contact created successfully! ID: {contact.id}")
+        print(f"\n Contact created successfully! ID: {contact.id}")
         display_contact(contact)
     except ValueError as e:
-        print(f"\n❌ Error creating contact: {str(e)}")
+        print(f"\n Error creating contact: {str(e)}")
         
 def view_contact_details():
     """Displays details of a specific contact by ID."""
@@ -84,7 +85,7 @@ def view_contact_details():
         contact = find_contact_by_id(contact_id)
         
         if not contact:
-            print(f"\n❌ Contact with ID {contact_id} not found.")
+            print(f"\n Contact with ID {contact_id} not found.")
             return
         display_contact(contact)
         
@@ -98,7 +99,28 @@ def view_contact_details():
             print("\nNo communications found for this contact.")
             
     except ValueError:
-        print("\n❌ Invalid ID format. Please enter a number.")
+        print("\n Invalid ID format. Please enter a number.")
+        
+def search_contacts_by_name():
+    """Search for contacts by name."""
+    search_term = input("\nEnter contact name to search: ").strip()
+    if not search_term:
+        print(" Search term cannot be empty.")
+        return
+    
+    contacts = search_contacts(search_term)
+    if not contacts:
+        print(f"\nNo contacts found matching '{search_term}'.")
+        return
+    
+    print(f"\nFound {len(contacts)} contact(s) matching '{search_term}':")
+    for i, contact in enumerate(contacts, 1):
+        print(f"{i}. {contact.name} (ID: {contact.id})")
+        # Show brief communication history
+        communications = get_communications_for_contact(contact.id)
+        if communications:
+            latest = max(communications, key=lambda c: c.date)
+            print(f" Latest: {latest.date} - {latest.notes[:50]}{'...' if len(latest.notes) > 50 else ''}")
         
 def delete_contact():
     """Delete a contact after confirmation."""
@@ -107,7 +129,7 @@ def delete_contact():
         contact = find_contact_by_id(contact_id)
         
         if not contact:
-            print(f"\n❌ Contact with ID {contact_id} not found.")
+            print(f"\n Contact with ID {contact_id} not found.")
             return
             
         # Confirm deletion
@@ -117,12 +139,12 @@ def delete_contact():
         confirm = input("\nType 'yes' to confirm deletion: ").strip().lower()
         if confirm == 'yes':
             contact.delete()
-            print(f"\n✅ Contact '{contact.name}' deleted successfully.")
+            print(f"\n Contact '{contact.name}' deleted successfully.")
         else:
-            print("\n❌ Deletion cancelled.")
+            print("\n Deletion cancelled.")
             
     except ValueError:
-        print("\n❌ Invalid ID format. Please enter a number.")
+        print("\n Invalid ID format. Please enter a number.")
 
         
 # Communication
@@ -147,7 +169,7 @@ def create_new_communication():
         contact = find_contact_by_id(contact_id)
         
         if not contact:
-            print(f"\n❌ Contact with ID {contact_id} not found.")
+            print(f"\n Contact with ID {contact_id} not found.")
             return
             
         print(f"\nCreating communication for: {contact.name}")
@@ -160,19 +182,19 @@ def create_new_communication():
                 datetime.strptime(date_str, '%Y-%m-%d') 
                 break
             except ValueError:
-                print("❌ Invalid date format. Please use YYYY-MM-DD.")
+                print(" Invalid date format. Please use YYYY-MM-DD.")
         
         notes = input("Enter communication notes: ").strip()
         if not notes:
-            print("\n❌ Notes cannot be empty.")
+            print("\n Notes cannot be empty.")
             return
             
         comm = create_communication(contact_id, date_str, notes)
-        print(f"\n✅ Communication created successfully! ID: {comm.id}")
+        print(f"\n Communication created successfully! ID: {comm.id}")
         display_communication(comm)
         
     except ValueError:
-        print("\n❌ Invalid ID format. Please enter a number.")
+        print("\n Invalid ID format. Please enter a number.")
         
         
 def view_communications_for_contact():
@@ -182,7 +204,7 @@ def view_communications_for_contact():
         contact = find_contact_by_id(contact_id)
         
         if not contact:
-            print(f"\n❌ Contact with ID {contact_id} not found.")
+            print(f"\n Contact with ID {contact_id} not found.")
             return
             
         print(f"\nCommunications for {contact.name}:")
@@ -198,7 +220,7 @@ def view_communications_for_contact():
             print(f"  Notes: {comm.notes}")
             
     except ValueError:
-        print("\n❌ Invalid ID format. Please enter a number.")
+        print("\n Invalid ID format. Please enter a number.")
         
         
 def delete_communication():
@@ -208,7 +230,7 @@ def delete_communication():
         comm = find_communication_by_id(comm_id)
         
         if not comm:
-            print(f"\n❌ Communication with ID {comm_id} not found.")
+            print(f"\n Communication with ID {comm_id} not found.")
             return
             
         # Get associated contact
@@ -223,12 +245,12 @@ def delete_communication():
         confirm = input("\nType 'yes' to confirm deletion: ").strip().lower()
         if confirm == 'yes':
             comm.delete()
-            print("\n✅ Communication deleted successfully.")
+            print("\n Communication deleted successfully.")
         else:
-            print("\n❌ Deletion cancelled.")
+            print("\n Deletion cancelled.")
             
     except ValueError:
-        print("\n❌ Invalid ID format. Please enter a number.")
+        print("\n Invalid ID format. Please enter a number.")
 
 
 def main():
@@ -258,9 +280,11 @@ def main():
                 elif contact_choice == "3":
                     view_contact_details()
                 elif contact_choice == "4":
+                    search_contacts_by_name()
+                elif contact_choice == "5":
                     delete_contact()
                 else:
-                    print("\n❌ Invalid option. Please try again.")
+                    print("\n Invalid option. Please try again.")
                     
         elif choice == "2":
             # Communication management submenu
@@ -279,10 +303,10 @@ def main():
                 elif comm_choice == "4":
                     delete_communication()
                 else:
-                    print("\n❌ Invalid option. Please try again.")
+                    print("\n Invalid option. Please try again.")
                     
         else:
-            print("\n❌ Invalid option. Please try again.")
+            print("\n Invalid option. Please try again.")
 
 if __name__ == "__main__":
     main()
