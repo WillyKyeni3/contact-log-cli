@@ -41,6 +41,10 @@ def get_communications_for_contact(contact_id):
         return contact.get_communications()
     return None
 
+def get_communications_in_date_range(start_date, end_date):
+    """Helper to get communications within a date range."""
+    return Communication.get_by_date_range(start_date, end_date)
+
 
 def validate_date(date_string):
     """Validate date string is in YYYY-MM-DD format."""
