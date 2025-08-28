@@ -17,6 +17,10 @@ def find_contact_by_id(id):
     """Helper to find a contact by ID."""
     return Contact.find_by_id(id)
 
+def search_contacts(name):
+    """Helper to search contacts by name."""
+    return Contact.find_by_name(name)
+
 # communication
 def create_communication(contact_id, date, notes):
     """Helper to create a communication through the model's create method."""
