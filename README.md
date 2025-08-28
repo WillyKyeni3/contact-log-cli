@@ -23,12 +23,14 @@ contact-log-cli/
 ├── Pipfile
 ├── README.md
 └── lib/
-├── cli.py # Main CLI interface
-├── debug.py # Testing script
-├── database.py # Database connection setup
-├── helpers.py # Helper functions
-└── models/
-├── init.py
-├── contact.py # Contact model
-└── communication.py # Communication model
+  └── models/
+  │    ├── init.py
+  │    ├── contact.py     
+  │    └── communication.py 
+  ├── cli.py 
+  ├── debug.py 
+  ├── database.py 
+  ├── helpers.py 
 ```
+
+
