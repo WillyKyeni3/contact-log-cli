@@ -65,3 +65,11 @@ class Communication(Base):
     def find_by_id(cls, id):
         """Finds a Communication by its ID."""
         return session.query(cls).filter_by(id=id).first()
+    
+    @classmethod
+    def get_by_date_range(cls, start_date, end_date):
+        """Retrieves communications within a date range (inclusive)."""
+        return session.query(cls).filter(
+            cls.date >= start_date,
+            cls.date <= end_date
+        ).order_by(cls.date.desc()).all()
