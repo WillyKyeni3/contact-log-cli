@@ -1,7 +1,8 @@
 from lib.helpers import (
     create_contact, get_all_contact, find_contact_by_id,
     create_communication, get_all_communications, find_communication_by_id,
-    get_communications_for_contact, search_contacts
+    get_communications_for_contact, search_contacts, 
+    get_communications_in_date_range, validate_date
 )
 from datetime import datetime, date
 from lib.models import Contact, Communication
@@ -32,7 +33,8 @@ def communication_menu():
     print("1. List all communications")
     print("2. Create a new communication")
     print("3. View communication for a contact")
-    print("4. Delete a communication")
+    print("4. Filter communications by date range")
+    print("5. Delete a communication")
     print("0. Back to main menu")
     print("------------------------")
     
@@ -222,6 +224,56 @@ def view_communications_for_contact():
     except ValueError:
         print("\n Invalid ID format. Please enter a number.")
         
+def filter_communications_by_date():
+    """Filter communications by date range."""
+    print("\n--- Filter Communications by Date Range ---")
+    
+    # Get start date
+    start_date_str = input("Enter start date (YYYY-MM-DD): ").strip()
+    if not validate_date(start_date_str):
+        print(" Invalid start date format.")
+        return
+    
+    # Get end date
+    end_date_str = input("Enter end date (YYYY-MM-DD): ").strip()
+    if not validate_date(end_date_str):
+        print(" Invalid end date format.")
+        return
+    
+    # Convert to date objects
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+    
+    # Validate date order
+    if start_date > end_date:
+        print(" Start date cannot be after end date.")
+        return
+    
+    # Get communications in date range
+    comms = get_communications_in_date_range(start_date, end_date)
+    
+    if not comms:
+        print(f"\nNo communications found between {start_date} and {end_date}.")
+        return
+    
+    print(f"\nFound {len(comms)} communication(s) between {start_date} and {end_date}:")
+    
+    # Group by contact for better organization
+    contacts_dict = {}
+    for comm in comms:
+        contact = find_contact_by_id(comm.contact_id)
+        contact_name = contact.name if contact else "[Unknown Contact]"
+        
+        if contact_name not in contacts_dict:
+            contacts_dict[contact_name] = []
+        contacts_dict[contact_name].append(comm)
+    
+    # Display grouped results
+    for contact_name, communications in contacts_dict.items():
+        print(f"\n{contact_name}:")
+        for comm in communications:
+            print(f"  - {comm.date}: {comm.notes[:80]}{'...' if len(comm.notes) > 80 else ''}")
+        
         
 def delete_communication():
     """Delete a communication entry after confirmation."""
@@ -299,8 +351,10 @@ def main():
                 elif comm_choice == "2":
                     create_new_communication()
                 elif comm_choice == "3":
-                    view_communications_for_contact()
+                    view_communications_for_contact()             
                 elif comm_choice == "4":
+                    filter_communications_by_date()
+                elif comm_choice == "5":
                     delete_communication()
                 else:
                     print("\n Invalid option. Please try again.")
