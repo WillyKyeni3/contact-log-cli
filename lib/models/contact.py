@@ -74,5 +74,5 @@ class Contact(Base):
     
     @classmethod
     def find_by_name(cls, name):
-        """Finds contacts by name (case-insensitive partial match)."""
+        """Finds contacts by name (case-insensitive)."""
         return session.query(cls).filter(cls.name.ilike(f'%{name}%')).all()
