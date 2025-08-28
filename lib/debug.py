@@ -137,7 +137,7 @@ def test_cli_flow():
     # Cleanup
     print("\n5. Cleaning up test data...")
     contact.delete()
-    print("✅ Test data cleaned up")
+    print(" Test data cleaned up")
 
 # helper functions for the CLI tests
 def list_all_contacts():
