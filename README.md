@@ -18,6 +18,7 @@ A command-line application for managing professional and personal contacts and l
 Run `python lib/cli.py` to start the application.
 
 ## File Structure
+```
 contact-log-cli/
 ├── Pipfile
 ├── README.md
@@ -30,3 +31,4 @@ contact-log-cli/
 ├── init.py
 ├── contact.py # Contact model
 └── communication.py # Communication model
+```
