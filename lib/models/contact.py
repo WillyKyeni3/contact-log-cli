@@ -71,3 +71,8 @@ class Contact(Base):
     def get_communications(self):
         """Returns all Communications for this Contact."""
         return self.communications
+    
+    @classmethod
+    def find_by_name(cls, name):
+        """Finds contacts by name (case-insensitive partial match)."""
+        return session.query(cls).filter(cls.name.ilike(f'%{name}%')).all()
