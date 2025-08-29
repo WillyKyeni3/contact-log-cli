@@ -60,7 +60,7 @@ def get_valid_date(prompt):
         date_str = input(prompt).strip()
         if validate_date(date_str):
             return date_str
-        print("❌ Invalid date format. Please use YYYY-MM-DD.")
+        print(" Invalid date format. Please use YYYY-MM-DD.")
 
 def get_non_empty_input(prompt, error_msg="Cannot be empty."):
     """Get non-empty input from user with validation."""
@@ -68,4 +68,4 @@ def get_non_empty_input(prompt, error_msg="Cannot be empty."):
         value = input(prompt).strip()
         if value:
             return value
-        print(f"❌ {error_msg}")
+        print(f" {error_msg}")
